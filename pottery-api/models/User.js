@@ -46,6 +46,11 @@ class User {
 
   static create = async (data) => {
     const { studioPostcode = null, postcode = null, username, firstname, lastname, password } = data
+
+    if(!username || !firstname || !lastname || !password ) {
+      throw new Error("Missing data")
+    }
+
     if (studioPostcode) {
       const response = await db.query("INSERT INTO potters (username, firstname, lastname, password, studio_postcode) VALUES ($1, $2, $3, $4, $5) RETURNING potters_id;", [username, firstname, lastname, password, studioPostcode])
       const newId = response.rows[0].potters_id
