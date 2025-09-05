@@ -1,0 +1,50 @@
+version: 0.2
+
+env:
+  secrets-manager:
+    SECRET_USERNAME: "pipeline-docker-credentials:username"
+    SECRET_PASSWORD: "pipeline-docker-credentials:password"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to DockerHub
+      - echo "$SECRET_PASSWORD" | docker login -u "$SECRET_USERNAME" --password-stdin
+
+  build:
+    commands:
+      - echo "Building Docker Image DB..."
+      - docker build --platform linux/amd64 -t emilesherrott/pottery-db-cloud:latest ./pottery-db/
+      - docker build --platform linux/amd64 -t emilesherrott/pottery-db-cloud:$CODEBUILD_BUILD_NUMBER ./pottery-db/
+
+
+      - echo "Building Docker Image API..."
+      - docker build --platform linux/amd64 -t emilesherrott/pottery-api-cloud:latest ./pottery-api/
+      - docker build --platform linux/amd64 -t emilesherrott/pottery-api-cloud:$CODEBUILD_BUILD_NUMBER ./pottery-api/
+
+      - echo "Building Docker Image PYTHON..."
+      - docker build --platform linux/amd64 -t emilesherrott/pottery-python-cloud:latest ./pottery-python/
+      - docker build --platform linux/amd64 -t emilesherrott/pottery-python-cloud:$CODEBUILD_BUILD_NUMBER ./pottery-python/
+
+
+      - echo "Building Docker Image JAVA..."
+      - docker build --platform linux/amd64 -t emilesherrott/java-logger-cloud:latest ./java-logger/
+      - docker build --platform linux/amd64 -t emilesherrott/java-logger-cloud:$CODEBUILD_BUILD_NUMBER ./java-logger/
+
+  post_build:
+    commands:
+      - echo "Pushing Docker Image DB..."
+      - docker push emilesherrott/pottery-db-cloud:latest
+      - docker push emilesherrott/pottery-db-cloud:$CODEBUILD_BUILD_NUMBER
+
+      - echo "Pushing Docker Image API..."
+      - docker push emilesherrott/pottery-api-cloud:latest
+      - docker push emilesherrott/pottery-api-cloud:$CODEBUILD_BUILD_NUMBER
+
+      - echo "Pushing Docker Image PYTHON..."
+      - docker push emilesherrott/pottery-python-cloud:latest
+      - docker push emilesherrott/pottery-python-cloud:$CODEBUILD_BUILD_NUMBER
+
+      - echo "Pushing Docker Image JAVA..."
+      - docker push emilesherrott/java-logger-cloud:latest
+      - docker push emilesherrott/java-logger-cloud:$CODEBUILD_BUILD_NUMBER

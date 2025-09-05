@@ -1,0 +1,84 @@
+- hosts: db
+  become: true
+  tasks:
+    - name: Update packages
+      yum:
+        name: '*'
+        state: latest
+      become: true
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+      become: true
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      become: true
+
+    - name: Run pottery-db container
+      docker_container:
+        name: pottery-db
+        image: emilesherrott/pottery-db-cloud:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: "p8K#v1zQhR7@tL2"
+          POSTGRES_DB: pottery
+
+
+- hosts: api
+  become: true
+  tasks:
+    - name: Update packages
+      yum:
+        name: '*'
+        state: latest
+      become: true
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+      become: true
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      become: true
+    - name: Add ec2-user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Install Docker Compose
+      shell: |
+        curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+      args:
+        executable: /bin/bash
+      become: true
+
+    - name: Copy docker-compose.yml to EC2 instance
+      copy:
+        src: "{{ playbook_dir }}/../../configuration/docker-compose.yml"  
+        dest: /home/ec2-user/docker-compose.yml
+        owner: ec2-user
+        group: ec2-user
+        mode: '0644'
+
+    - name: Run docker-compose
+      shell: docker-compose up -d
+      args:
+        chdir: /home/ec2-user/
+      become: true
