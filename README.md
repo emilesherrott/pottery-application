@@ -1,34 +1,20 @@
 # 3-Microserivce-Repo
 
-## Run Application
+## DEVELOPMENT
 
-From base of repo (you'll need Docker Desktop running) execute the following command:
-- `docker-compose up -d` - to run the Docker
+### Manual Docker Build
 
-This will pull the images from DockerHub to your local machine and execute the `docker-compose.yaml` file, running the containers in a defined order. 
-
-If there's any issues with pulling the Docker Images, you'll also be able to build your own images with commands similar to:
-- `docker build -t <your-docker-username>/pottery-api:0.0.1.RELEASE ./<path-to-microservice-dockerfile>`
-  - If I were running these commands from my route directory it would look like the following:
-  - `docker build -t emilesherrott/pottery-api:0.0.1.RELEASE ./pottery-api`
-
-**NOTE**: You'd need to also build the images for the DB microservice and the Python microservice. 
-
-Once running, navigate to **./pottery-cli/index.html** and open in the browser. 
-
-To see the application running it's recommended that you:
-1. Create an account as a Potter
-2. Sign in with your account
-3. Generate several pottery pieces with different styles
-4. Log out and create an account / sign in with a Customer account
-5. 'Purchase' different amounts of pottery pieces from the potter account created in stages: 1-3
-6. Sign back in as the Potter
-7. Click the button to visualise data
-
+- There's a shell script at the root of the repository called: `docker-build-all.sh`
+- Update your privlages in order to execute script: `chmod +x docker-build-all.sh`
+- From the root of the repository run: `./docker-build-all.sh` to build all Docker images
+- Executing `docker-compose up` at the root of the directory will trigger the corresponding **docker-compose.yml** file and launch the application locally. 
+  - A seperate **docker-compose.yml** file is located inside the **./configuration** folder which is utilised for production using the provisioned infrastructures correct platform. 
 
 ## Pipeline Automation 
 
-There's the potential to apply configuration to this repository to automate the building and pushing of Docker Images through an **AWS CodePipeline** and **AWS CodeBuild** project. 
+If desired there's the potential to apply configuration to this repository to automate the building and pushing of Docker Images through an **AWS CodePipeline** and **AWS CodeBuild** project. 
+
+**AWS CodeBuild** utilises the **docker-build.yml** file defined inside **./configuration** file. The phases within this file build the 4 seperate microservices for cloud architecture with both the tag of **latest** and the **build number**. 
 
 ### Secret Mananger
 
@@ -40,11 +26,6 @@ To automate this you'll need to add a secret to **AWS's Secret Mananger** resour
   - **password** - value: your Docker password
 
 
-## Manual Docker Build
-
-- There's a shell script at the root of the repository called: `docker-build-all.sh`
-- Update your privlages in order to execute script: `chmod +x docker-build-all.sh`
-- From the root of the repository run: `./docker-build-all.sh` to build all Docker images
 
 # Production
 
@@ -101,3 +82,18 @@ ec2-98-82-21-112.compute-1.amazonaws.com
 ec2-100-27-49-138.compute-1.amazonaws.com
 ```
 
+## Full Stack
+
+To connect the frontend to the **Elastic Load Balancer** you'll need to find the **Terraform Output** with the value **elb_public_dns**. 
+
+
+## Using the application
+
+To see the application running it's recommended that you:
+1. Create an account as a Potter
+2. Sign in with your account
+3. Generate several pottery pieces with different styles
+4. Log out and create an account / sign in with a Customer account
+5. 'Purchase' different amounts of pottery pieces from the potter account created in stages: 1-3
+6. Sign back in as the Potter
+7. Click the button to visualise data

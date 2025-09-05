@@ -29,7 +29,7 @@ const createPotteryItem = async (e) => {
       }),
     };
 
-    const response = await fetch("http://elb-421779324.us-east-1.elb.amazonaws.com/ceramics/create", options);
+    const response = await fetch("http://localhost/ceramics/create", options);
     const responseData = await response.json();
 
     if (responseData.success) {
@@ -54,7 +54,7 @@ const renderVisualisation = async (id) => {
         id: id,
       }),
     };
-    const response = await fetch("http://elb-421779324.us-east-1.elb.amazonaws.com/sales/salesInfo", options);
+    const response = await fetch("http://localhost/sales/salesInfo", options);
     const responseData = await response.json();
     if (responseData.success) {
       visualiseH2.textContent = "Purchase History";
@@ -94,7 +94,7 @@ const visualiseStyleInfo = async () => {
         authorisation: localStorage.getItem("token"),
       },
     };
-    const response = await fetch("http://elb-421779324.us-east-1.elb.amazonaws.com/sales/styleInfo", options);
+    const response = await fetch("http://localhost/sales/styleInfo", options);
     const responseData = await response.json();
     if (responseData.success) {
       renderPieSection.innerHTML = responseData.visualisatinon.visualisation_html;
@@ -122,7 +122,7 @@ const loadPotteryInventory = async () => {
         authorisation: localStorage.getItem("token"),
       },
     };
-    const response = await fetch("http://elb-421779324.us-east-1.elb.amazonaws.com/ceramics/inventory", options);
+    const response = await fetch("http://localhost/ceramics/inventory", options);
     const data = await response.json();
     console.log(data);
 
