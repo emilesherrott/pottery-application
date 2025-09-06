@@ -1,3 +1,6 @@
+import ELB_PUBLIC_DNS from "./modules/config.js";
+const baseUrl = ELB_PUBLIC_DNS || "http://localhost"
+
 const roleTypeForm = document.querySelector("#role-type-form")
 const signUpSection = document.querySelector("#sign-up-section")
 
@@ -86,7 +89,7 @@ async function submitDetails(e) {
   }
 
   try {
-    const response = await fetch("http://localhost/users/register", {
+    const response = await fetch(`${baseUrl}/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

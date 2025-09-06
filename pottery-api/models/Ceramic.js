@@ -44,6 +44,9 @@ class Ceramic {
 
     static create = async (pottersId, data) => {
         const { pieceName, clay, style, price, size } = data
+        if (!pieceName || !clay || !style || !price || !size) {
+            throw Error('Missing data')
+        }
         const response = await db.query('INSERT INTO ceramics (piece_name, clay, style, price, size, piece_name_potter_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;', [pieceName, clay, style, price, size, pottersId])
         if(response.rows.length === 0) {
             throw Error('Ceramic piece not added')

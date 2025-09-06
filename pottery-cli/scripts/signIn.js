@@ -1,3 +1,6 @@
+import ELB_PUBLIC_DNS from "./modules/config.js";
+const baseUrl = ELB_PUBLIC_DNS || "http://localhost"
+
 const roleTypeForm = document.querySelector("#role-type-form");
 const signInSection = document.querySelector("#sign-in-section");
 
@@ -79,9 +82,9 @@ async function submitDetails(e) {
 
   let loginUrl;
   if (role === "potter") {
-    loginUrl = "http://localhost/users/potter/login";
+    loginUrl = `${baseUrl}/users/potter/login`;
   } else if (role === "customer") {
-    loginUrl = "http://localhost/users/owner/login";
+    loginUrl = `${baseUrl}/users/owner/login`;
   }
 
   try {

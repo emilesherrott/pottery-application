@@ -71,7 +71,7 @@
 
     - name: Copy docker-compose.yml to EC2 instance
       copy:
-        src: "{{ playbook_dir }}/../../configuration/docker-compose.yml"  
+        src: "{{ playbook_dir }}/../docker-compose.yml"  
         dest: /home/ec2-user/docker-compose.yml
         owner: ec2-user
         group: ec2-user

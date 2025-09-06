@@ -13,7 +13,7 @@ services:
       JAVA_PORT: 8080
       DB_USER: postgres
       DB_PORT: 5432
-      DB_HOST: '172.31.75.92'
+      DB_HOST: DB_PRIVATE_IP
       DB_PASSWORD: "p8K#v1zQhR7@tL2"
       DB_NAME: pottery
       SECRET_TOKEN: "63eadb34645166d645f0bad4fc560bfe301ecb711fe73581299e695d275e3072"
@@ -28,17 +28,6 @@ services:
     networks:
       - pottery-network
 
-  # pottery-db:
-  #   image: emilesherrott/pottery-db-cloud:latest
-  #   ports:
-  #     - '5432:5432'
-  #   restart: always
-  #   environment:
-  #     POSTGRES_PASSWORD: "p8K#v1zQhR7@tL2"
-  #     POSTGRES_DB: "pottery"
-    # networks:
-    #   - pottery-network
-  
   pottery-python:
     image: emilesherrott/pottery-python-cloud:latest
     ports:

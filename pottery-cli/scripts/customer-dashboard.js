@@ -1,8 +1,11 @@
+import ELB_PUBLIC_DNS from "./modules/config.js";
+const baseUrl = ELB_PUBLIC_DNS || "http://localhost"
+
 const potterySection = document.querySelector("#pottery-section");
 
 const loadPottryIndex = async () => {
   try {
-    const response = await fetch("http://localhost/ceramics/");
+    const response = await fetch(`${baseUrl}/ceramics/`);
     const data = await response.json();
 
     data.map((i) => {
@@ -77,7 +80,7 @@ async function handlePurchase(itemId, quantity, purchaseButton) {
 
   try {
     // Sending purchase data via fetch (or any other method for server interaction)
-    const response = await fetch("http://localhost/sales/makeSale", {
+    const response = await fetch(`${baseUrl}/sales/makeSale`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

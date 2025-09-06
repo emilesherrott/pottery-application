@@ -1,3 +1,6 @@
+import ELB_PUBLIC_DNS from "./modules/config.js";
+const baseUrl = ELB_PUBLIC_DNS || "http://localhost"
+
 const addPotterySection = document.querySelector("#add-pottery-item");
 const potterySection = document.querySelector("#pottery-section");
 const addPotteryForm = document.querySelector("#add-pottery-form");
@@ -29,7 +32,7 @@ const createPotteryItem = async (e) => {
       }),
     };
 
-    const response = await fetch("http://localhost/ceramics/create", options);
+    const response = await fetch(`${baseUrl}/ceramics/create`, options);
     const responseData = await response.json();
 
     if (responseData.success) {
@@ -54,7 +57,7 @@ const renderVisualisation = async (id) => {
         id: id,
       }),
     };
-    const response = await fetch("http://localhost/sales/salesInfo", options);
+    const response = await fetch(`${baseUrl}/sales/salesInfo`, options);
     const responseData = await response.json();
     if (responseData.success) {
       visualiseH2.textContent = "Purchase History";
@@ -94,7 +97,7 @@ const visualiseStyleInfo = async () => {
         authorisation: localStorage.getItem("token"),
       },
     };
-    const response = await fetch("http://localhost/sales/styleInfo", options);
+    const response = await fetch(`${baseUrl}/sales/styleInfo`, options);
     const responseData = await response.json();
     if (responseData.success) {
       renderPieSection.innerHTML = responseData.visualisatinon.visualisation_html;
@@ -122,7 +125,7 @@ const loadPotteryInventory = async () => {
         authorisation: localStorage.getItem("token"),
       },
     };
-    const response = await fetch("http://localhost/ceramics/inventory", options);
+    const response = await fetch(`${baseUrl}/ceramics/inventory`, options);
     const data = await response.json();
     console.log(data);
 

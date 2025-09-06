@@ -46,19 +46,36 @@ Traffic will be seperated through the load balancer to reach to API. All request
 
 ### Outputs
 
-#### DB HOST
+There's a series of terraform outputs which in production we wish to make use of. 
 
-Follwing the execution of the `terraform apply` command a series of different outputs will be generated. Most importantly, a **db_server_private_ip** address. This is important to configure the **pottery-api** to access the centralised **pottery-db**. 
+#### FRONTEND FETCH REQUESTS
 
-The EC2 instance which holds the DB will be accessed through the **docker-compose.yml** file located in: `./configuration/docker-compose.yml`. Configuration for this microservice isn't directly defined here but via the Ansible playbook. 
+The frontend can make it's fetch requests to the provisioned elastic load balancer. In order to configure this:
+- After running `terraform apply` run:
 
-You need to provide the private IP address as the **DB_HOST value** on **Line 16** within the previously mentioned **docker-compose.yml** file which will allow the API to find and connect to the DB. 
+There's a **script** located inside **./scripts/update-docker-compose-with-private-ip.sh**
 
-The final output should look similar to the following:
+To change the DB HOST to the private IP address of the EC2 instance, within **./script**:
+- Run: `chmod +x configure-cli-elb.sh`
+- Run: `./configure-cli-elb.sh`
 
-```
-DB_HOST: '172.31.75.92'
-```
+This script access the output and then creates a **/modules/config.js** file with a variable defined. 
+
+In the frontend HTML you'll notice a `<script type="module" src="./scripts/modules/index.js" defer></script>` which allows this variable to be utilised.
+
+This variable is imported into the corresponding Javascript files and if this variable exists chooses the address of the Elastic Load Balancer, otherwise it'll use LocalHost instead. 
+
+#### PRIVATE IP ADDRESS FOR DB
+
+Through the terraform configuration we create an EC2 instance. Through Ansible this will be configured to host our PostgresDB. Each of the APIs will connect directly to the singular DB. 
+
+There's another **script** located inside **./scripts/update-docker-compose-with-private-ip.sh**
+
+To change the DB HOST to the private IP address of the EC2 instance, within **./script**:
+- Run: `chmod +x update-docker-compose-with-private-ip.sh`
+- Run: `./update-docker-compose-with-private-ip.sh`
+
+This command inserts the private IP address of an EC2 instance which eventually will hold the DB container, allowing access for the API hosted on seperate EC2 instances. 
 
 #### ANSIBLE INVENTORY
 
@@ -82,9 +99,11 @@ ec2-98-82-21-112.compute-1.amazonaws.com
 ec2-100-27-49-138.compute-1.amazonaws.com
 ```
 
-## Full Stack
+### ANSIBLE
 
-To connect the frontend to the **Elastic Load Balancer** you'll need to find the **Terraform Output** with the value **elb_public_dns**. 
+To deploy the **DB** onto the EC2 instance and then copy over and execute the **docker-compose.yml** file onto the other EC2 Instances:
+- From the root of the repo, run: `cd ansible`
+- Run: `ansible-playbook playbooks/execute-docker.yml`
 
 
 ## Using the application
