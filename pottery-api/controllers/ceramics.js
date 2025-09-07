@@ -1,5 +1,3 @@
-const axios = require('axios')
-
 const { Ceramic } = require('../models/Ceramic')
 
 const index = async (req, res) => {
@@ -40,11 +38,11 @@ const create = async (req, res) => {
 const salesInfo = async (req, res) => {
     try {
         const pottersId = req.pottersId
-        const salesData = await Ceramic.getSalesInfo(pottersId)
+        const salesData = await Ceramic.getPieceAndPrice(pottersId)
 
         res.status(200).json(salesData)
     } catch (err) {
-        res.status(500).json({ error: "error"})
+        res.status(500).json({ error: err.message})
     }
 }
 

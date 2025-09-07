@@ -61,7 +61,7 @@ const renderVisualisation = async (id) => {
     const responseData = await response.json();
     if (responseData.success) {
       visualiseH2.textContent = "Purchase History";
-      visualiseDiv.innerHTML = responseData.visualisatinon.visualisation_html;
+      visualiseDiv.innerHTML = responseData.visualisation.visualisation_html;
 
       clearButton.classList.remove("hidden");
 
@@ -100,7 +100,7 @@ const visualiseStyleInfo = async () => {
     const response = await fetch(`${baseUrl}/sales/styleInfo`, options);
     const responseData = await response.json();
     if (responseData.success) {
-      renderPieSection.innerHTML = responseData.visualisatinon.visualisation_html;
+      renderPieSection.innerHTML = responseData.visualisation.visualisation_html;
 
       closeButton.classList.remove("hidden");
 

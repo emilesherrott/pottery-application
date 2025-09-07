@@ -14,7 +14,7 @@ const salesInfo = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      visualisatinon: response.data,
+      visualisation: response.data,
     })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -32,7 +32,7 @@ const styleInfo = async (req, res) => {
     const response = await axios.post(`http://pottery-python:${pythonPort}/generate-style-visualisation`, formattedData);
     res.status(200).json({
       success: true,
-      visualisatinon: response.data
+      visualisation: response.data
     })
   } catch (err) {
     res.status(500).json({ error: err.message })

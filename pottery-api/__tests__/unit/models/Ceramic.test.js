@@ -172,38 +172,38 @@ describe("Ceramic", () => {
       await expect(Ceramic.create(1, mockCeramicData)).rejects.toThrow("Ceramic piece not added")
     })
   })
-})
 
-describe("getPieceAndPrice", () => {
-  it("resovles with array of cermaic data", async () => {
-    const mockCeramicResponse = [
-      {
-        piece_name: "Tall jar",
-        price: 16,
-      },
-      {
-        piece_name: "Medium jar",
-        price: 14,
-      },
-      {
-        piece_name: "Small jar",
-        price: 12,
-      }
-    ]
+  describe("getPieceAndPrice", () => {
+    it("resovles with array of cermaic data", async () => {
+      const mockCeramicResponse = [
+        {
+          piece_name: "Tall jar",
+          price: 16,
+        },
+        {
+          piece_name: "Medium jar",
+          price: 14,
+        },
+        {
+          piece_name: "Small jar",
+          price: 12,
+        },
+      ]
 
-    jest.spyOn(db, "query").mockResolvedValueOnce({ rows: mockCeramicResponse })
-    const result = await Ceramic.getPieceAndPrice()
+      jest.spyOn(db, "query").mockResolvedValueOnce({ rows: mockCeramicResponse })
+      const result = await Ceramic.getPieceAndPrice()
 
-    expect(result).toBeInstanceOf(Array)
-    expect(result[0]).toBeInstanceOf(Ceramic)
-    expect(result[0]).toHaveProperty("piece", "Tall jar")
-    expect(result[0]).toHaveProperty("price", 16)
-    expect(db.query).toHaveBeenCalledWith('SELECT piece_name, price FROM ceramics;')
-  })
+      expect(result).toBeInstanceOf(Array)
+      expect(result[0]).toBeInstanceOf(Ceramic)
+      expect(result[0]).toHaveProperty("piece", "Tall jar")
+      expect(result[0]).toHaveProperty("price", 16)
+      expect(db.query).toHaveBeenCalledWith("SELECT piece_name, price FROM ceramics;")
+    })
 
-  it("should throw an Error when returned an empty array", async () => {
-    jest.spyOn(db, "query").mockResolvedValueOnce({ rows: [] })
+    it("should throw an Error when returned an empty array", async () => {
+      jest.spyOn(db, "query").mockResolvedValueOnce({ rows: [] })
 
-    await expect(Ceramic.getPieceAndPrice()).rejects.toThrow("No ceramic pieces available")
+      await expect(Ceramic.getPieceAndPrice()).rejects.toThrow("No ceramic pieces available")
+    })
   })
 })
