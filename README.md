@@ -1,5 +1,18 @@
 # 3-Microserivce-Repo
 
+## Application Overview
+
+This repository hosts a microservices-based application designed for the pottery ecosystem, serving both **Potters** and **Customers**.
+
+- **For Potters**:  
+  Potters can create and manage their ceramic pieces, track their inventory, and visualise sales and pricing data through interactive dashboards. The application provides insights into their production and sales trends, helping potters optimise their offerings.
+
+- **For Customers**:  
+  Customers can browse available pottery pieces, view pricing, and make purchases from multiple potters. The platform ensures a seamless shopping experience while supporting the growth of independent pottery creators.
+
+The system leverages multiple microservices, including APIs for inventory management, sales processing, and data visualisation, with a centralised PostgreSQL database and Dockerised deployment for development, testing, and production environments.
+
+
 ## DEVELOPMENT
 
 ### Manual Docker Build
