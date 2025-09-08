@@ -25,7 +25,7 @@ const create = async (req, res) => {
         const pottersId = req.pottersId
         const data = req.body
         const result = await Ceramic.create(pottersId, data)
-        res.status(200).json({
+        res.status(201).json({
             "success": true,
             "result": result
         })

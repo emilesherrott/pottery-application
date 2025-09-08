@@ -25,7 +25,24 @@ To automate this you'll need to add a secret to **AWS's Secret Mananger** resour
   -  **username** - value: your Docker username
   - **password** - value: your Docker password
 
+# Testing
 
+Unit Tests and Integration Tests have been written for the **pottery-api** service. 
+
+## Unit Tests
+
+To execute the unit tests:
+- navigate to: **./pottery-api** and run: `npm i` to install dependencies
+- run: `npm run unitTests`
+
+## Integration TestS
+
+A limited amount of integrations tests have been written. Instead of using a SAAS Platform, the DB the integrationt tests run against is from a local Docker Container. 
+
+To build the Image for testing from: **./pottery-api/__tests__/integration/config**, run: `docker build -t emilesherrott/pottery-db-test:latest .`
+
+
+You can then start the container by running: `chmod +x start-test-db.sh` and then  `./start-test-db.sh` from **./scripts**
 
 # Production
 

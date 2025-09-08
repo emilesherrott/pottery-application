@@ -4,7 +4,7 @@ function authenticator(req, res, next){
     const token = req.headers['authorisation'];
 
     if (token) {
-        jwt.verify(token, process.env.SECRET_TOKEN, async (err, data) => {
+        jwt.verify(token, process.env.SECRET_TOKEN || "test_secret", async (err, data) => {
             if(err){
                 res.status(403).json({ err: 'Invalid token' })
             } else {

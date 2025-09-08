@@ -35,7 +35,7 @@ async function potterLogin(req, res) {
             });
         }
 
-        jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600 }, sendToken);
+        jwt.sign(payload, process.env.SECRET_TOKEN || "test_secret", { expiresIn: 3600 }, sendToken);
 
       } else {
         throw new Error('User could not be authenticated')  
@@ -65,7 +65,7 @@ async function ownerLogin(req, res) {
             });
         }
 
-        jwt.sign(payload, process.env.SECRET_TOKEN, { expiresIn: 3600 }, sendToken);
+        jwt.sign(payload, process.env.SECRET_TOKEN || "test_secret", { expiresIn: 3600 }, sendToken);
 
       } else {
         throw new Error('User could not be authenticated')  
