@@ -48,7 +48,7 @@ To execute the unit tests:
 - navigate to: **./pottery-api** and run: `npm i` to install dependencies
 - run: `npm run unitTests`
 
-## Integration TestS
+## Integration Tests
 
 A limited amount of integrations tests have been written. Instead of using a SAAS Platform, the DB the integrationt tests run against is from a local Docker Container. 
 
@@ -58,6 +58,15 @@ To build the Image for testing from: **./pottery-api/__tests__/integration/confi
 You can then start the container by running: `chmod +x start-test-db.sh` and then  `./start-test-db.sh` from **./scripts**
 
 # Production
+
+## Manual Docker Build
+
+If you haven't established an AWS Pipeline to automate the building of Docker Images from **./scripts** you can execute: `docker-build-all-cloud.sh`
+
+- **NOTE**: You'll need to define environment variables for:
+  - `DOCKER_USERNAME`
+  - `DOCKER_PASSWORD`
+  For this to work. 
 
 ## Terraform
 
@@ -81,31 +90,21 @@ There's a series of terraform outputs which in production we wish to make use of
 #### FRONTEND FETCH REQUESTS
 
 The frontend can make it's fetch requests to the provisioned elastic load balancer. In order to configure this:
-- After running `terraform apply` run:
+- After running `terraform apply` run from **./scripts**:
 
-There's a **script** located inside **./scripts/update-docker-compose-with-private-ip.sh**
-
-To change the DB HOST to the private IP address of the EC2 instance, within **./script**:
 - Run: `chmod +x configure-cli-elb.sh`
 - Run: `./configure-cli-elb.sh`
+
+To change the DB HOST to the private IP address of the EC2 instance, within **./script**:
+- Run: `chmod +x update-docker-compose-with-private-ip.sk`
+- Run: `update-docker-compose-with-private-ip.sh`
 
 This script access the output and then creates a **/modules/config.js** file with a variable defined. 
 
 In the frontend HTML you'll notice a `<script type="module" src="./scripts/modules/index.js" defer></script>` which allows this variable to be utilised.
 
 This variable is imported into the corresponding Javascript files and if this variable exists chooses the address of the Elastic Load Balancer, otherwise it'll use LocalHost instead. 
-
-#### PRIVATE IP ADDRESS FOR DB
-
-Through the terraform configuration we create an EC2 instance. Through Ansible this will be configured to host our PostgresDB. Each of the APIs will connect directly to the singular DB. 
-
-There's another **script** located inside **./scripts/update-docker-compose-with-private-ip.sh**
-
-To change the DB HOST to the private IP address of the EC2 instance, within **./script**:
-- Run: `chmod +x update-docker-compose-with-private-ip.sh`
-- Run: `./update-docker-compose-with-private-ip.sh`
-
-This command inserts the private IP address of an EC2 instance which eventually will hold the DB container, allowing access for the API hosted on seperate EC2 instances. 
+ 
 
 #### ANSIBLE INVENTORY
 
@@ -134,6 +133,8 @@ ec2-100-27-49-138.compute-1.amazonaws.com
 To deploy the **DB** onto the EC2 instance and then copy over and execute the **docker-compose.yml** file onto the other EC2 Instances:
 - From the root of the repo, run: `cd ansible`
 - Run: `ansible-playbook playbooks/execute-docker.yml`
+
+The defeault health checks being executed on the Elastic Load Balancer often lead to a delay of roughly 4 minutes before the application is accessible. 
 
 
 ## Using the application

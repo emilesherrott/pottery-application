@@ -14,7 +14,7 @@ for service in "${services[@]}"; do
   docker build --platform linux/amd64 -t "${DOCKER_USERNAME}/${service}-cloud:latest" "./${service}"
 
   echo "🚀 Pushing $service to Docker Hub..."
-  docker push "${DOCKER_USERNAME}/${service}:latest"
+  docker push "${DOCKER_USERNAME}/${service}-cloud:latest"
 done
 
 echo "✅ All images built and pushed successfully."

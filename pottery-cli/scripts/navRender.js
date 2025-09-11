@@ -1,5 +1,4 @@
 import ELB_PUBLIC_DNS from "./modules/config.js";
-const baseUrl = ELB_PUBLIC_DNS || "http://localhost"
 
 document.addEventListener("DOMContentLoaded", renderPage)
 

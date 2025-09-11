@@ -1,5 +1,7 @@
 const axios = require("axios")
-const pythonPort = process.env.PYTHON_PORT
+const pythonPort = process.env.PYTHON_PORT || 3000
+
+
 
 const { Sale } = require("../models/Sale")
 const { aggregateSalesData, aggregateStylesData, formatStylesData } = require("../helpers/dataProcessor")
@@ -28,7 +30,6 @@ const styleInfo = async (req, res) => {
 
     const aggregatedData = aggregateStylesData(styleSaleResults)
     const formattedData = formatStylesData(aggregatedData)
-
     const response = await axios.post(`http://pottery-python:${pythonPort}/generate-style-visualisation`, formattedData);
     res.status(200).json({
       success: true,

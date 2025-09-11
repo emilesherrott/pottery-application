@@ -1,7 +1,6 @@
 import ELB_PUBLIC_DNS from "./modules/config.js";
 const baseUrl = ELB_PUBLIC_DNS || "http://localhost"
 
-console.log(baseUrl)
 
 const potterySection = document.querySelector('#pottery-section')
 const form = document.querySelector('form')
@@ -9,7 +8,7 @@ const plotlySection = document.querySelector('#plotly-section')
 
 const loadPottryIndex = async () => {
     try {
-
+        console.log(baseUrl)
         const response = await fetch(`${baseUrl}/ceramics/`)
         const data = await response.json()
 
@@ -36,7 +35,7 @@ const loadPottryIndex = async () => {
             potterySection.appendChild(article)
         })
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 
