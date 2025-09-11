@@ -3,7 +3,7 @@
   tasks:
     - name: Update packages
       yum:
-        name: '*'
+        name: "*"
         state: latest
       become: true
 
@@ -33,13 +33,12 @@
           POSTGRES_PASSWORD: "p8K#v1zQhR7@tL2"
           POSTGRES_DB: pottery
 
-
 - hosts: api
   become: true
   tasks:
     - name: Update packages
       yum:
-        name: '*'
+        name: "*"
         state: latest
       become: true
 
@@ -71,14 +70,15 @@
 
     - name: Copy docker-compose.yml to EC2 instance
       copy:
-        src: "{{ playbook_dir }}/../docker-compose.yml"  
+        src: "{{ playbook_dir }}/../docker-compose.yml"
         dest: /home/ec2-user/docker-compose.yml
         owner: ec2-user
         group: ec2-user
-        mode: '0644'
+        mode: "0644"
 
-    - name: Run docker-compose
-      shell: docker-compose up -d
+    - name: Run docker-compose with DB_PRIVATE_IP set
+      shell: |
+        export DB_PRIVATE_IP={{ hostvars[groups['db'][0]]['ansible_default_ipv4']['address'] }}
+        docker-compose up -d
       args:
         chdir: /home/ec2-user/
-      become: true
